@@ -82,6 +82,6 @@ loadUpSongByIndex(indexToPlay)
 // - Fixed up bugs and errors as a team
 
 // After Thursday
-// - Project can be submit as late as Sunday at 23:59
-// - Quiz: Done any time between Thurs (15:00) and Sunday (23:59)
+// - Project can be submit as late as Sunday at 23:59 EST
+// - Quiz: Done any time between Thurs (15:00) and Monday (11:59, noon)
 //    - Will discuss this item more on Thursday
