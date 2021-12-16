@@ -3,10 +3,7 @@ const thePlaylist = document.querySelector(`#playlist`)
 const playOrPause = document.querySelector(`#playOrPause`)
 
 
-//////////// THE PLAYER VARIABLES
-// Create an <audio> element in memory
-const theAudio = new Audio()
-
+//////////// DATA
 // A simplified version of a song playlist
 const songs = [
   `audio/bensound-sunny.mp3`,
@@ -14,8 +11,13 @@ const songs = [
   `https://cdn.pixabay.com/audio/2021/11/25/audio_91b32e02f9.mp3`
 ]
 
+
+//////////// THE PLAYER VARIABLES
+// Create an <audio> element in memory
+const theAudio = new Audio()
 // Current song being played from the [song] array above
 let indexToPlay = 0
+
 
 
 //////////// UI/FUNCTIONALITY
@@ -46,42 +48,44 @@ const loadUpSongByIndex = function(index) {
   }
 }
 
-// When you click play/pause button
-playOrPause.addEventListener(`click`, (event) => {
-  togglePlayOrPause()
-})
 
-// Add the songs (just the urls in this example) to the UI
-songs.forEach(function(song, index) {
-  thePlaylist.innerHTML += `<li class="song" data-index="${index}">${song}</li>`
-})
 
-// If the #playlist is clicked anywhere
-thePlaylist.addEventListener(`click`, function(event) {
 
-  // Get the <li> element
-  const songClicked = event.target.closest(`.song`)
+window.addEventListener(`load`, function(event) {
 
-  // Find it's data-index="" value, set it to the indexToPlay
-  indexToPlay = songClicked.dataset.index
+  ///////// CONTROLS
+  // When you click play/pause button
+  playOrPause.addEventListener(`click`, (event) => {
+    togglePlayOrPause()
+  })
 
-  // Load the song based on the new index value from the click
+
+  ///////// PLAYLIST STUFF
+
+  // Add the songs (just the urls in this example) to the UI
+  songs.forEach(function(song, index) {
+    thePlaylist.innerHTML += `<li class="song" data-index="${index}">${song}</li>`
+  })
+
+  // If the #playlist is clicked anywhere
+  thePlaylist.addEventListener(`click`, function(event) {
+
+    // Get the <li> element
+    const songClicked = event.target.closest(`.song`)
+
+    // escape this function immediately, if what was clicked is not a .song
+    if (!songClicked.matches(`.song`)) return 
+
+    // Find it's data-index="" value, set it to the indexToPlay
+    indexToPlay = songClicked.dataset.index
+
+    // Load the song based on the new index value from the click
+    loadUpSongByIndex(indexToPlay)
+  })
+
+
+  // Start by playing the first song
   loadUpSongByIndex(indexToPlay)
+
 })
 
-// Start by playing the first song
-loadUpSongByIndex(indexToPlay)
-
-
-
-
-// Thursday:
-// - Clean up the code and ui
-// - Next/prev song (both with click, or `complete` event)
-// - "Present" your UI/code
-// - Fixed up bugs and errors as a team
-
-// After Thursday
-// - Project can be submit as late as Sunday at 23:59 EST
-// - Quiz: Done any time between Thurs (15:00) and Monday (11:59, noon)
-//    - Will discuss this item more on Thursday
