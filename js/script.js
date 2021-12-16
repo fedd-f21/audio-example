@@ -112,12 +112,11 @@ window.addEventListener(`load`, function(event) {
     trackTime.textContent = secondsToMinutes(theAudio.currentTime)
     trackProgress.value = theAudio.currentTime / theAudio.duration
   })
+
   theAudio.addEventListener(`durationchange`, event => {
     trackDuration.textContent = secondsToMinutes(theAudio.duration)
     trackProgress.value = 0
   })
-
-
 
 
 
