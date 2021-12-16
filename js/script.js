@@ -1,18 +1,23 @@
 import { songs } from './data.js'
-import { $, $$ } from './utils.js'
+import { $, $$, secondsToMinutes } from './utils.js'
 
 
 //////////// DOCUMENT ELEMENTS
 const thePlaylist = $(`#playlist`)
 const playOrPause = $(`#playOrPause`)
+const playPrev = $(`#playPrev`)
 const playNext = $(`#playNext`)
+const trackVolume = $(`#trackVolume`)
+const trackTime = $(`#trackTime`)
+const trackDuration = $(`#trackDuration`)
+const trackProgress = $(`#trackProgress`)
+
 
 //////////// THE PLAYER VARIABLES
 // Create an <audio> element in memory
 const theAudio = new Audio()
 // Current song being played from the [song] array above
 let indexToPlay = 0
-
 
 
 //////////// UI/FUNCTIONALITY
@@ -46,6 +51,7 @@ const loadUpSongByIndex = function(index) {
   // Highlight the song that's playing
   $(`[data-index="${indexToPlay}"]`).classList.add(`loaded`)
 
+
   // Play the song, if it was already playing when this was pressed
   if (wasPlaying) {
     togglePlayOrPause(true)
@@ -53,16 +59,27 @@ const loadUpSongByIndex = function(index) {
 }
 
 
-const playNextSong = function() {
+const playNextSong = function(direction = 1) {
   // if the next index is greater than the last index of the array, then go back to 0
-  loadUpSongByIndex(indexToPlay + 1)
+  let nextIndex = ((indexToPlay + direction) < 0) ? songs.length - 1
+                : ((indexToPlay + direction) > (songs.length - 1)) ? 0
+                : indexToPlay + direction
+
+  /* if ((indexToPlay + direction) < 0) {
+    nextIndex = songs.length - 1
+  } else if ((indexToPlay + direction) > (songs.length - 1)) {
+    nextIndex = 0
+  } else {
+    nextIndex = indexToPlay + direction
+  } */
+
+  loadUpSongByIndex(nextIndex)
 }
 
-const playPrevSong = function() {
-  // if the prev index is less than 0, then go back to the last index of the array
-  loadUpSongByIndex(indexToPlay - 1)
+const setVolume = function(vol) {
+  theAudio.volume = vol
+  trackVolume.value = theAudio.volume
 }
-
 
 window.addEventListener(`load`, function(event) {
 
@@ -72,9 +89,36 @@ window.addEventListener(`load`, function(event) {
     togglePlayOrPause()
   })
 
-  playNext.addEventListener(`click`, (event) => {
-    playNextSong()
+  playPrev.addEventListener(`click`, (event) => {
+    playNextSong(-1)
   })
+
+  playNext.addEventListener(`click`, (event) => {
+    playNextSong(1)
+  })
+
+  trackVolume.addEventListener(`input`, (event) => {
+    setVolume(trackVolume.value)
+  })
+
+  theAudio.addEventListener(`canplaythrough`, event => {
+    //console.log(theAudio.currentTime, theAudio.duration)
+    trackTime.textContent = secondsToMinutes(theAudio.currentTime)
+    trackDuration.textContent = secondsToMinutes(theAudio.duration)
+    trackProgress.value = 0
+  })
+
+  theAudio.addEventListener(`timeupdate`, event => {
+    trackTime.textContent = secondsToMinutes(theAudio.currentTime)
+    trackProgress.value = theAudio.currentTime / theAudio.duration
+  })
+  theAudio.addEventListener(`durationchange`, event => {
+    trackDuration.textContent = secondsToMinutes(theAudio.duration)
+    trackProgress.value = 0
+  })
+
+
+
 
 
   ///////// PLAYLIST STUFF
@@ -101,6 +145,9 @@ window.addEventListener(`load`, function(event) {
 
   // Start by playing the first song
   loadUpSongByIndex(indexToPlay)
+
+  // Setup the initial volume
+  setVolume(0.5)
 
 })
 

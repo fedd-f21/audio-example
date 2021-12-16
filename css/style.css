@@ -6,3 +6,10 @@
 .song.loaded {
   background-color: lightcoral
 }
+
+.progress {
+  display: flex;
+}
+.progress input {
+  flex-grow: 1;
+}
