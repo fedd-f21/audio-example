@@ -1,15 +1,10 @@
+import { songs } from './data.js'
+import { $ } from './utils.js'
+
+
 //////////// DOCUMENT ELEMENTS
-const thePlaylist = document.querySelector(`#playlist`)
-const playOrPause = document.querySelector(`#playOrPause`)
-
-
-//////////// DATA
-// A simplified version of a song playlist
-const songs = [
-  `audio/bensound-sunny.mp3`,
-  `https://cdn.pixabay.com/audio/2021/11/13/audio_cb4f1212a9.mp3`,
-  `https://cdn.pixabay.com/audio/2021/11/25/audio_91b32e02f9.mp3`
-]
+const thePlaylist = $(`#playlist`)
+const playOrPause = $(`#playOrPause`)
 
 
 //////////// THE PLAYER VARIABLES
