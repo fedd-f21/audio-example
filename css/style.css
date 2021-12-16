@@ -1,3 +1,8 @@
 .song:hover {
   background-color: #eee;
 }
+
+
+.song.loaded {
+  background-color: lightcoral
+}
